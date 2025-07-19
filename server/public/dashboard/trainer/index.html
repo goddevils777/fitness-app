@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness App - Дашборд тренера</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/dashboard/trainer/trainer.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <h1>🏋️ Дашборд тренера</h1>
+            <div class="user-info">
+                <span id="trainerName">Загрузка...</span>
+                <button id="logoutBtn" class="btn-logout">Выйти</button>
+            </div>
+        </header>
+        
+        <div class="dashboard-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Всего клиентов</h3>
+                    <span class="stat-number" id="totalClients">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Активных тренировок</h3>
+                    <span class="stat-number" id="activeWorkouts">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Доход этот месяц</h3>
+                    <span class="stat-number" id="monthlyIncome">0₴</span>
+                </div>
+            </div>
+            
+            <div class="actions-section">
+                <button id="addClientBtn" class="btn btn-primary">
+                    ➕ Добавить победителя
+                </button>
+                <button id="viewClientsBtn" class="btn btn-secondary">
+                    👥 Мои победители
+                </button>
+            </div>
+            
+            <div id="inviteModal" class="modal hidden">
+                <div class="modal-content">
+                    <h2>Пригласить победителя</h2>
+                    <p>Отправьте эту ссылку своему клиенту:</p>
+                    <input type="text" id="inviteLink" readonly>
+                    <button id="copyLinkBtn" class="btn btn-primary">Копировать</button>
+                    <button id="closeModalBtn" class="btn btn-secondary">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/dashboard/trainer/trainer.js"></script>
+</body>
+</html>

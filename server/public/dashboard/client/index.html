@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness App - Дашборд победителя</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/dashboard/client/client.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <h1>🏆 Дашборд победителя</h1>
+            <div class="user-info">
+                <span id="clientName">Загрузка...</span>
+                <button id="logoutBtn" class="btn-logout">Выйти</button>
+            </div>
+        </header>
+        
+        <div class="dashboard-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Тренировок выполнено</h3>
+                    <span class="stat-number" id="completedWorkouts">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Дней подряд</h3>
+                    <span class="stat-number" id="streak">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Следующая тренировка</h3>
+                    <span class="stat-text" id="nextWorkout">Не назначена</span>
+                </div>
+            </div>
+            
+            <div class="actions-section">
+                <button id="workoutBtn" class="btn btn-primary">
+                    💪 Мои тренировки
+                </button>
+                <button id="nutritionBtn" class="btn btn-secondary">
+                    🥗 Питание
+                </button>
+                <button id="progressBtn" class="btn btn-success">
+                    📈 Прогресс
+                </button>
+            </div>
+            
+            <div class="info-section">
+                <div class="info-card">
+                    <h3>Мой тренер</h3>
+                    <p id="trainerInfo">Загрузка...</p>
+                </div>
+                <div class="info-card">
+                    <h3>Моя цель</h3>
+                    <p id="goalInfo">Не указана</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/dashboard/client/client.js"></script>
+</body>
+</html>

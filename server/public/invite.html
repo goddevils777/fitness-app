@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness App - Приглашение</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-card">
+            <h1>🏋️ Fitness App</h1>
+            <div id="loading" class="loading">Загрузка приглашения...</div>
+            
+            <div id="inviteInfo" class="hidden">
+                <h2>Приглашение от тренера</h2>
+                <p>Тренер <strong id="trainerName"></strong> пригласил вас присоединиться к Fitness App</p>
+                
+                <div style="margin: 30px 0;">
+                    <p>Для принятия приглашения войдите через Telegram:</p>
+                    <a href="#" id="telegramLink" target="_blank" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
+                        🤖 Принять через Telegram
+                    </a>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <p style="color: #666; font-size: 14px;">
+                        Нажмите кнопку выше, чтобы открыть Telegram и завершить присоединение к команде
+                    </p>
+                </div>
+            </div>
+            
+            <div id="error" class="hidden">
+                <h2>❌ Ошибка</h2>
+                <p>Приглашение недействительно или истекло</p>
+                <a href="/" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
+                    🏠 На главную
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="invite.js"></script>
+</body>
+</html>

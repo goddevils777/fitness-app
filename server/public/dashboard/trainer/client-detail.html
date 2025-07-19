@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness App - Детали клиента</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/dashboard/trainer/trainer.css">
+    <link rel="stylesheet" href="/dashboard/trainer/client-detail.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button id="backBtn" class="btn-back">← К списку</button>
+
+            </div>
+            <div class="user-info">
+                <span id="trainerName">Тренер</span>
+                <button id="logoutBtn" class="btn-logout">Выйти</button>
+            </div>
+        </header>
+        
+        <div class="dashboard-content">
+            <!-- Информация о клиенте -->
+            <div class="client-overview">
+                <div class="client-info-card">
+                    <div class="client-avatar-large" id="clientAvatar">А</div>
+                    <div class="client-details">
+                        <h2 id="clientFullName">Имя клиента</h2>
+                        <p id="clientUsername">@username</p>
+                        <p id="joinDate">Присоединился: --</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Расписание тренировок -->
+<!-- Расписание тренировок -->
+<div class="schedule-section">
+    <div class="section-header">
+        <h3>📅 Расписание тренировок</h3>
+    </div>
+    
+    <div class="schedule-grid">
+        <div class="day-card">
+            <h4>Понедельник <span class="day-date" id="monday-date"></span></h4>
+            <div class="time-selector">
+                <label>🕐 Время:</label>
+                <select id="monday-hour">
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18" selected>18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                </select>
+                <span>:</span>
+                <select id="monday-minute">
+                    <option value="00" selected>00</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                </select>
+            </div>
+            <div class="exercises-container" id="monday-exercises">
+                <!-- Упражнения будут добавляться динамически -->
+            </div>
+            <button class="btn-add-exercise" onclick="addExercise('monday')">
+                ➕ Добавить упражнение
+            </button>
+        </div>
+        
+        <div class="day-card">
+            <h4>Вторник <span class="day-date" id="tuesday-date"></span></h4>
+            <div class="time-selector">
+                <label>🕐 Время:</label>
+                <select id="tuesday-hour">
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18" selected>18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                </select>
+                <span>:</span>
+                <select id="tuesday-minute">
+                    <option value="00" selected>00</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                </select>
+            </div>
+            <div class="exercises-container" id="tuesday-exercises">
+                <!-- Упражнения будут добавляться динамически -->
+            </div>
+            <button class="btn-add-exercise" onclick="addExercise('tuesday')">
+                ➕ Добавить упражнение
+            </button>
+        </div>
+        
+        <div class="day-card">
+            <h4>Среда <span class="day-date" id="wednesday-date"></span></h4>
+            <div class="time-selector">
+                <label>🕐 Время:</label>
+                <select id="wednesday-hour">
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18" selected>18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                </select>
+                <span>:</span>
+                <select id="wednesday-minute">
+                    <option value="00" selected>00</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                </select>
+            </div>
+            <div class="exercises-container" id="wednesday-exercises">
+                <!-- Упражнения будут добавляться динамически -->
+            </div>
+            <button class="btn-add-exercise" onclick="addExercise('wednesday')">
+                ➕ Добавить упражнение
+            </button>
+        </div>
+        
+        <div class="day-card">
+            <h4>Четверг <span class="day-date" id="thursday-date"></span></h4>
+            <div class="time-selector">
+                <label>🕐 Время:</label>
+                <select id="thursday-hour">
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18" selected>18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                </select>
+                <span>:</span>
+                <select id="thursday-minute">
+                    <option value="00" selected>00</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                </select>
+            </div>
+            <div class="exercises-container" id="thursday-exercises">
+                <!-- Упражнения будут добавляться динамически -->
+            </div>
+            <button class="btn-add-exercise" onclick="addExercise('thursday')">
+                ➕ Добавить упражнение
+            </button>
+        </div>
+        
+        <div class="day-card">
+            <h4>Пятница <span class="day-date" id="friday-date"></span></h4>
+            <div class="time-selector">
+                <label>🕐 Время:</label>
+                <select id="friday-hour">
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18" selected>18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                </select>
+                <span>:</span>
+                <select id="friday-minute">
+                    <option value="00" selected>00</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                </select>
+            </div>
+            <div class="exercises-container" id="friday-exercises">
+                <!-- Упражнения будут добавляться динамически -->
+            </div>
+            <button class="btn-add-exercise" onclick="addExercise('friday')">
+                ➕ Добавить упражнение
+            </button>
+        </div>
+        
+        <div class="day-card">
+            <h4>Суббота <span class="day-date" id="saturday-date"></span></h4>
+            <div class="time-selector">
+                <label>🕐 Время:</label>
+                <select id="saturday-hour">
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18" selected>18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                </select>
+                <span>:</span>
+                <select id="saturday-minute">
+                    <option value="00" selected>00</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                </select>
+            </div>
+            <div class="exercises-container" id="saturday-exercises">
+                <!-- Упражнения будут добавляться динамически -->
+            </div>
+            <button class="btn-add-exercise" onclick="addExercise('saturday')">
+                ➕ Добавить упражнение
+            </button>
+        </div>
+        
+        <div class="day-card">
+            <h4>Воскресенье <span class="day-date" id="sunday-date"></span></h4>
+            <div class="time-selector">
+                <label>🕐 Время:</label>
+                <select id="sunday-hour">
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18" selected>18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                </select>
+                <span>:</span>
+                <select id="sunday-minute">
+                    <option value="00" selected>00</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                </select>
+            </div>
+            <div class="exercises-container" id="sunday-exercises">
+                <!-- Упражнения будут добавляться динамически -->
+            </div>
+            <button class="btn-add-exercise" onclick="addExercise('sunday')">
+                ➕ Добавить упражнение
+            </button>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
+    
+    <script src="/dashboard/trainer/client-detail.js"></script>
+</body>
+</html>

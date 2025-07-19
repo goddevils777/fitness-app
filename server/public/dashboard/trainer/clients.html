@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness App - Мои победители</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/dashboard/trainer/trainer.css">
+    <link rel="stylesheet" href="/dashboard/trainer/clients.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button id="backBtn" class="btn-back">← К списку</button>
+                <h1>Победители</h1>
+            </div>
+            <div class="user-info">
+                <span id="trainerName">Тренер</span>
+                <button id="logoutBtn" class="btn-logout">Выйти</button>
+            </div>
+        </header>
+        
+        <div class="dashboard-content">
+            <div id="loading" class="loading">Загрузка клиентов...</div>
+            
+            <div id="clientsList" class="clients-grid hidden">
+                <!-- Клиенты будут загружены динамически -->
+            </div>
+            
+            <div id="noClients" class="no-clients-message hidden">
+                <h2>У вас пока нет клиентов</h2>
+                <p>Создайте ссылку-приглашение, чтобы пригласить первого клиента</p>
+                <button id="createInviteBtn" class="btn btn-primary">
+                    ➕ Создать приглашение
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/dashboard/trainer/clients.js"></script>
+</body>
+</html>
