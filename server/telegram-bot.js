@@ -19,7 +19,19 @@ bot.onText(/\/start(.*)/, async (msg, match) => {
   
   // Проверка существующего пользователя
   try {
-    const existingUser = await User.findOne({ telegramId });
+    console.log('🔍 Проверяем пользователя с telegramId:', telegramId);
+    
+    const existingUser = await User.findOne({ where: { telegramId } });
+    
+    console.log('🔍 Результат поиска пользователя:', existingUser ? 'НАЙДЕН' : 'НЕ НАЙДЕН');
+    if (existingUser) {
+      console.log('🔍 Данные найденного пользователя:', {
+        id: existingUser.id,
+        name: existingUser.name,
+        userType: existingUser.userType,
+        createdAt: existingUser.createdAt
+      });
+    }
     
     if (existingUser) {
       // Пользователь уже зарегистрирован - отправляем кнопку для входа
