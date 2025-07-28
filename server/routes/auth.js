@@ -32,10 +32,23 @@ router.post('/login', async (req, res) => {
     
     // Если есть код приглашения, найти тренера
     if (inviteCode) {
+      console.log('🔍 Поиск тренера с кодом приглашения:', inviteCode);
+      
       const trainer = await User.findOne({ 
         where: { inviteCode: inviteCode, userType: 'trainer' } 
       });
+      
+      console.log('🔍 Результат поиска тренера:', trainer ? 'НАЙДЕН' : 'НЕ НАЙДЕН');
+      if (trainer) {
+        console.log('🔍 Данные тренера:', {
+          id: trainer.id,
+          name: trainer.name,
+          inviteCode: trainer.inviteCode
+        });
+      }
+      
       if (!trainer) {
+        console.log('❌ Тренер с таким кодом не найден');
         return res.status(400).json({ 
           success: false, 
           error: 'Неверный код приглашения' 
