@@ -1,59 +1,33 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../database');
+const User = require('./User');
 
-const exerciseSchema = new mongoose.Schema({
-  text: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  order: {
-    type: Number,
-    required: true
-  }
-});
-
-const dayScheduleSchema = new mongoose.Schema({
-  day: {
-    type: String,
-    required: true,
-    enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-  },
-  time: {
-    hour: {
-      type: String,
-      required: true,
-      default: '18'
-    },
-    minute: {
-      type: String,
-      required: true,
-      default: '00'
+const Schedule = sequelize.define('Schedule', {
+  clientId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: User,
+      key: 'id'
     }
   },
-  exercises: [exerciseSchema]
-});
-
-const scheduleSchema = new mongoose.Schema({
-  clientId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
   trainerId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: User,
+      key: 'id'
+    }
   },
-  weekSchedule: [dayScheduleSchema],
+  weekSchedule: {
+    type: DataTypes.JSON,
+    allowNull: false,
+    defaultValue: []
+  },
   isActive: {
-    type: Boolean,
-    default: true
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
   }
-}, {
-  timestamps: true
 });
 
-// Индекс для быстрого поиска
-scheduleSchema.index({ clientId: 1, trainerId: 1 });
-
-module.exports = mongoose.model('Schedule', scheduleSchema);
+module.exports = Schedule;

@@ -1,58 +1,44 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../database');
+const User = require('./User');
 
-const exerciseResultSchema = new mongoose.Schema({
-  exerciseName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  weight: {
-    type: Number,
-    required: true
-  },
-  reps: {
-    type: Number,
-    default: 0
-  },
-  sets: {
-    type: Number,
-    default: 0
-  }
-});
-
-const clientStatsSchema = new mongoose.Schema({
+const ClientStats = sequelize.define('ClientStats', {
   clientId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: User,
+      key: 'id'
+    }
   },
   trainerId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: User,
+      key: 'id'
+    }
   },
   currentWeight: {
-    type: Number,
-    default: 0
+    type: DataTypes.FLOAT,
+    defaultValue: 0
   },
-  exerciseResults: [exerciseResultSchema],
+  exerciseResults: {
+    type: DataTypes.JSON,
+    defaultValue: []
+  },
   workoutStarted: {
-    type: Boolean,
-    default: false
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   },
   workoutStartTime: {
-    type: Date,
-    default: null
+    type: DataTypes.DATE,
+    allowNull: true
   },
   lastWorkoutDate: {
-    type: Date,
-    default: null
+    type: DataTypes.DATE,
+    allowNull: true
   }
-}, {
-  timestamps: true
 });
 
-// Индекс для быстрого поиска
-clientStatsSchema.index({ clientId: 1, trainerId: 1 });
-
-module.exports = mongoose.model('ClientStats', clientStatsSchema);
+module.exports = ClientStats;
