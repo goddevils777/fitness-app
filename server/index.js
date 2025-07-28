@@ -46,7 +46,7 @@ app.get('/invite/:code', async (req, res) => {
     const inviteCode = req.params.code;
     
     // Найти тренера по коду приглашения
-    const trainer = await User.findOne({ inviteCode: inviteCode });
+    const trainer = await User.findOne({ where: { inviteCode: inviteCode } });
     
     if (!trainer) {
       return res.redirect('/invite.html?error=invalid');
