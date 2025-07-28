@@ -8,8 +8,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Подключение к SQLite
-sequelize.sync()
-  .then(() => console.log('SQLite база данных подключена'))
+sequelize.sync({ force: true })
+  .then(() => console.log('SQLite база данных очищена и пересоздана'))
   .catch(err => console.error('Ошибка подключения к базе данных:', err));
 
 // Импорт модели пользователя
