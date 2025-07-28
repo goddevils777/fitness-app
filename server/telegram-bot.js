@@ -35,7 +35,7 @@ bot.onText(/\/start(.*)/, async (msg, match) => {
         inline_keyboard: [
           [{
             text: '🚀 Открыть приложение',
-            web_app: { url: authLink }
+            url: authLink
           }]
         ]
       };
@@ -172,7 +172,7 @@ bot.on('callback_query', async (callbackQuery) => {
       inline_keyboard: [
         [{
           text: '🚀 Открыть приложение',
-          web_app: { url: authLink }
+          url: authLink
         }]
       ]
     };
