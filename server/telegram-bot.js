@@ -223,7 +223,7 @@ bot.on('callback_query', async (callbackQuery) => {
         inline_keyboard: [
           [{
             text: '🚀 Завершить регистрацию',
-            web_app: { url: authLink }
+            url: authLink
           }]
         ]
       };
