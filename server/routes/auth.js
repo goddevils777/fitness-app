@@ -94,6 +94,7 @@ router.post('/check-user', async (req, res) => {
     
     const user = await User.findOne({ where: { telegramId } });
     
+    
     if (user) {
       // Пользователь существует - генерируем токен для автоматического входа
       const token = jwt.sign(
