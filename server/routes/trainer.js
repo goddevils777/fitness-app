@@ -34,8 +34,8 @@ router.post('/clients/:clientId/schedule', authTrainer, async (req, res) => {
     const { exercises, times } = req.body;
     
     // Проверяем что клиент принадлежит этому тренеру
-    const client = await User.findById(clientId);
-    if (!client || client.trainerId.toString() !== req.userId) {
+    const client = await User.findByPk(clientId);
+    if (!client || client.trainerId != req.userId) {
       return res.status(404).json({ success: false, error: 'Клиент не найден' });
     }
     
@@ -62,27 +62,23 @@ router.post('/clients/:clientId/schedule', authTrainer, async (req, res) => {
     
     // Ищем существующее расписание или создаем новое
     let schedule = await Schedule.findOne({ 
-      clientId: clientId, 
-      trainerId: req.userId 
+      where: { clientId: clientId, trainerId: req.userId }
     });
     
     if (schedule) {
-      schedule.weekSchedule = weekSchedule;
-      schedule.updatedAt = new Date();
+      await schedule.update({ weekSchedule: weekSchedule });
     } else {
-      schedule = new Schedule({
+      schedule = await Schedule.create({
         clientId: clientId,
         trainerId: req.userId,
         weekSchedule: weekSchedule
       });
     }
     
-    await schedule.save();
-    
     res.json({
       success: true,
       message: 'Расписание сохранено',
-      scheduleId: schedule._id
+      scheduleId: schedule.id
     });
     
   } catch (error) {
@@ -97,15 +93,13 @@ router.get('/clients/:clientId/schedule', authTrainer, async (req, res) => {
     const { clientId } = req.params;
     
     // Проверяем что клиент принадлежит этому тренеру
-    const client = await User.findById(clientId);
-    if (!client || client.trainerId.toString() !== req.userId) {
+    const client = await User.findByPk(clientId);
+    if (!client || client.trainerId != req.userId) {
       return res.status(404).json({ success: false, error: 'Клиент не найден' });
     }
     
     const schedule = await Schedule.findOne({ 
-      clientId: clientId, 
-      trainerId: req.userId,
-      isActive: true 
+      where: { clientId: clientId, trainerId: req.userId, isActive: true }
     });
     
     if (!schedule) {
@@ -131,7 +125,7 @@ router.get('/clients/:clientId/schedule', authTrainer, async (req, res) => {
       success: true,
       exercises: exercises,
       times: times,
-      scheduleId: schedule._id
+      scheduleId: schedule.id
     });
     
   } catch (error) {
@@ -143,8 +137,8 @@ router.get('/clients/:clientId/schedule', authTrainer, async (req, res) => {
 // Получение профиля тренера
 router.get('/profile', authTrainer, async (req, res) => {
   try {
-    const trainer = await User.findById(req.userId);
-    const clientsCount = await User.countDocuments({ trainerId: req.userId });
+    const trainer = await User.findByPk(req.userId);
+    const clientsCount = await User.count({ where: { trainerId: req.userId } });
     
     res.json({
       success: true,
@@ -164,9 +158,7 @@ router.post('/generate-invite', authTrainer, async (req, res) => {
     const inviteCode = crypto.randomBytes(16).toString('hex');
     
     // Сохраняем код приглашения в профиле тренера
-    await User.findByIdAndUpdate(req.userId, { 
-      inviteCode: inviteCode 
-    });
+    await User.update({ inviteCode: inviteCode }, { where: { id: req.userId } });
     
     const inviteLink = `${process.env.BASE_URL}/invite/${inviteCode}`;
     
@@ -182,15 +174,15 @@ router.post('/generate-invite', authTrainer, async (req, res) => {
 // Получение списка клиентов тренера
 router.get('/clients', authTrainer, async (req, res) => {
   try {
-    const clients = await User.find({ 
-      trainerId: req.userId,
-      userType: 'client' 
-    }).select('name username createdAt');
+    const clients = await User.findAll({ 
+      where: { trainerId: req.userId, userType: 'client' },
+      attributes: ['id', 'name', 'username', 'createdAt']
+    });
     
     res.json({
       success: true,
       clients: clients.map(client => ({
-        id: client._id,
+        id: client.id,
         name: client.name,
         username: client.username,
         joinedAt: client.createdAt
@@ -206,16 +198,16 @@ router.get('/clients/:clientId', authTrainer, async (req, res) => {
   try {
     const { clientId } = req.params;
     
-    const client = await User.findById(clientId);
+    const client = await User.findByPk(clientId);
     
-    if (!client || client.trainerId.toString() !== req.userId) {
+    if (!client || client.trainerId != req.userId) {
       return res.status(404).json({ success: false, error: 'Клиент не найден' });
     }
     
     res.json({
       success: true,
       client: {
-        id: client._id,
+        id: client.id,
         name: client.name,
         username: client.username,
         joinedAt: client.createdAt,
@@ -233,18 +225,17 @@ router.get('/clients/:clientId/stats', authTrainer, async (req, res) => {
     const { clientId } = req.params;
     
     // Проверяем что клиент принадлежит этому тренеру
-    const client = await User.findById(clientId);
-    if (!client || client.trainerId.toString() !== req.userId) {
+    const client = await User.findByPk(clientId);
+    if (!client || client.trainerId != req.userId) {
       return res.status(404).json({ success: false, error: 'Клиент не найден' });
     }
     
     let stats = await ClientStats.findOne({ 
-      clientId: clientId, 
-      trainerId: req.userId 
+      where: { clientId: clientId, trainerId: req.userId }
     });
     
     if (!stats) {
-      stats = new ClientStats({
+      stats = await ClientStats.create({
         clientId: clientId,
         trainerId: req.userId,
         currentWeight: 0,
@@ -252,7 +243,6 @@ router.get('/clients/:clientId/stats', authTrainer, async (req, res) => {
         workoutStarted: false,
         workoutStartTime: null
       });
-      await stats.save();
     }
     
     // Проверяем нужно ли сбросить статус тренировки
@@ -269,9 +259,10 @@ router.get('/clients/:clientId/stats', authTrainer, async (req, res) => {
       
       if (workoutDate.getTime() < today.getTime()) {
         // Тренировка была вчера или раньше - сбрасываем
-        stats.workoutStarted = false;
-        stats.workoutStartTime = null;
-        await stats.save();
+        await stats.update({
+          workoutStarted: false,
+          workoutStartTime: null
+        });
         
         workoutStarted = false;
         workoutStartTime = null;
@@ -299,27 +290,28 @@ router.post('/clients/:clientId/stats', authTrainer, async (req, res) => {
     const { currentWeight, exerciseResults } = req.body;
     
     // Проверяем что клиент принадлежит этому тренеру
-    const client = await User.findById(clientId);
-    if (!client || client.trainerId.toString() !== req.userId) {
+    const client = await User.findByPk(clientId);
+    if (!client || client.trainerId != req.userId) {
       return res.status(404).json({ success: false, error: 'Клиент не найден' });
     }
     
     let stats = await ClientStats.findOne({ 
-      clientId: clientId, 
-      trainerId: req.userId 
+      where: { clientId: clientId, trainerId: req.userId }
     });
     
     if (!stats) {
-      stats = new ClientStats({
+      stats = await ClientStats.create({
         clientId: clientId,
-        trainerId: req.userId
+        trainerId: req.userId,
+        currentWeight: currentWeight || 0,
+        exerciseResults: exerciseResults || []
+      });
+    } else {
+      await stats.update({
+        currentWeight: currentWeight || stats.currentWeight,
+        exerciseResults: exerciseResults || stats.exerciseResults
       });
     }
-    
-    stats.currentWeight = currentWeight || stats.currentWeight;
-    stats.exerciseResults = exerciseResults || stats.exerciseResults;
-    
-    await stats.save();
     
     res.json({
       success: true,
@@ -338,29 +330,30 @@ router.post('/clients/:clientId/start-workout', authTrainer, async (req, res) =>
     const { clientId } = req.params;
     
     // Проверяем что клиент принадлежит этому тренеру
-    const client = await User.findById(clientId);
-    if (!client || client.trainerId.toString() !== req.userId) {
+    const client = await User.findByPk(clientId);
+    if (!client || client.trainerId != req.userId) {
       return res.status(404).json({ success: false, error: 'Клиент не найден' });
     }
     
     let stats = await ClientStats.findOne({ 
-      clientId: clientId, 
-      trainerId: req.userId 
+      where: { clientId: clientId, trainerId: req.userId }
     });
     
     if (!stats) {
-      stats = new ClientStats({
+      stats = await ClientStats.create({
         clientId: clientId,
-        trainerId: req.userId
+        trainerId: req.userId,
+        workoutStarted: true,
+        workoutStartTime: new Date(),
+        lastWorkoutDate: new Date()
+      });
+    } else {
+      await stats.update({
+        workoutStarted: true,
+        workoutStartTime: new Date(),
+        lastWorkoutDate: new Date()
       });
     }
-    
-    // Устанавливаем статус начала тренировки
-    stats.workoutStarted = true;
-    stats.workoutStartTime = new Date();
-    stats.lastWorkoutDate = new Date();
-    
-    await stats.save();
     
     res.json({
       success: true,
@@ -381,8 +374,8 @@ router.post('/clients/:clientId/nutrition', authTrainer, async (req, res) => {
     const { meals, times } = req.body;
     
     // Проверяем что клиент принадлежит этому тренеру
-    const client = await User.findById(clientId);
-    if (!client || client.trainerId.toString() !== req.userId) {
+    const client = await User.findByPk(clientId);
+    if (!client || client.trainerId != req.userId) {
       return res.status(404).json({ success: false, error: 'Клиент не найден' });
     }
     
@@ -410,27 +403,23 @@ router.post('/clients/:clientId/nutrition', authTrainer, async (req, res) => {
     
     // Ищем существующий план питания или создаем новый
     let nutrition = await Nutrition.findOne({ 
-      clientId: clientId, 
-      trainerId: req.userId 
+      where: { clientId: clientId, trainerId: req.userId }
     });
     
     if (nutrition) {
-      nutrition.weekNutrition = weekNutrition;
-      nutrition.updatedAt = new Date();
+      await nutrition.update({ weekNutrition: weekNutrition });
     } else {
-      nutrition = new Nutrition({
+      nutrition = await Nutrition.create({
         clientId: clientId,
         trainerId: req.userId,
         weekNutrition: weekNutrition
       });
     }
     
-    await nutrition.save();
-    
     res.json({
       success: true,
       message: 'План питания сохранен',
-      nutritionId: nutrition._id
+      nutritionId: nutrition.id
     });
     
   } catch (error) {
@@ -445,15 +434,13 @@ router.get('/clients/:clientId/nutrition', authTrainer, async (req, res) => {
     const { clientId } = req.params;
     
     // Проверяем что клиент принадлежит этому тренеру
-    const client = await User.findById(clientId);
-    if (!client || client.trainerId.toString() !== req.userId) {
+    const client = await User.findByPk(clientId);
+    if (!client || client.trainerId != req.userId) {
       return res.status(404).json({ success: false, error: 'Клиент не найден' });
     }
     
     const nutrition = await Nutrition.findOne({ 
-      clientId: clientId, 
-      trainerId: req.userId,
-      isActive: true 
+      where: { clientId: clientId, trainerId: req.userId, isActive: true }
     });
     
     if (!nutrition) {
@@ -484,7 +471,7 @@ router.get('/clients/:clientId/nutrition', authTrainer, async (req, res) => {
       success: true,
       meals: meals,
       times: times,
-      nutritionId: nutrition._id
+      nutritionId: nutrition.id
     });
     
   } catch (error) {

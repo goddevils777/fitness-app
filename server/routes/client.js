@@ -26,16 +26,25 @@ const authClient = async (req, res, next) => {
 // Получение профиля клиента
 router.get('/profile', authClient, async (req, res) => {
   try {
-    const client = await User.findById(req.userId).populate('trainerId', 'name');
+    const client = await User.findByPk(req.userId);
     
     if (!client) {
       return res.status(404).json({ success: false, error: 'Клиент не найден' });
+    }
+
+    // Получаем тренера если есть
+    let trainerName = null;
+    if (client.trainerId) {
+      const trainer = await User.findByPk(client.trainerId);
+      if (trainer) {
+        trainerName = trainer.name;
+      }
     }
     
     res.json({
       success: true,
       name: client.name,
-      trainerName: client.trainerId ? client.trainerId.name : null,
+      trainerName: trainerName,
       completedWorkouts: 8, // Моковые данные
       streak: 3, // Моковые данные
       nextWorkout: 'Завтра в 18:00', // Моковые данные
@@ -49,7 +58,7 @@ router.get('/profile', authClient, async (req, res) => {
 // Получение расписания тренировок клиента
 router.get('/schedule', authClient, async (req, res) => {
   try {
-    const client = await User.findById(req.userId).populate('trainerId', 'name');
+    const client = await User.findByPk(req.userId);
     
     if (!client || !client.trainerId) {
       return res.status(404).json({ 
@@ -57,12 +66,19 @@ router.get('/schedule', authClient, async (req, res) => {
         error: 'Тренер не назначен' 
       });
     }
+
+    // Получаем тренера
+    const trainer = await User.findByPk(client.trainerId);
+    if (!trainer) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Тренер не найден' 
+      });
+    }
     
     const Schedule = require('../models/Schedule');
     const schedule = await Schedule.findOne({ 
-      clientId: req.userId, 
-      trainerId: client.trainerId._id,
-      isActive: true 
+      where: { clientId: req.userId, trainerId: client.trainerId, isActive: true }
     });
     
     if (!schedule) {
@@ -82,7 +98,7 @@ router.get('/schedule', authClient, async (req, res) => {
       hasSchedule: true,
       nextWorkout: nextWorkout,
       weekSchedule: schedule.weekSchedule,
-      trainerName: client.trainerId.name
+      trainerName: trainer.name
     });
     
   } catch (error) {
@@ -149,9 +165,11 @@ router.get('/progress', authClient, async (req, res) => {
     const ClientStats = require('../models/ClientStats');
     
     // Получаем все записи статистики клиента
-    const stats = await ClientStats.find({ 
-      clientId: req.userId 
-    }).sort({ updatedAt: -1 }).limit(30); // Последние 30 записей
+    const stats = await ClientStats.findAll({ 
+      where: { clientId: req.userId },
+      order: [['updatedAt', 'DESC']],
+      limit: 30 // Последние 30 записей
+    });
     
     if (stats.length === 0) {
       return res.json({
@@ -173,14 +191,16 @@ router.get('/progress', authClient, async (req, res) => {
     const allExercises = new Set();
     
     stats.forEach(stat => {
-      stat.exerciseResults.forEach(ex => {
-        allExercises.add(ex.exerciseName);
-      });
+      if (stat.exerciseResults && Array.isArray(stat.exerciseResults)) {
+        stat.exerciseResults.forEach(ex => {
+          allExercises.add(ex.exerciseName);
+        });
+      }
     });
     
     // Формируем историю тренировок
     const workoutHistory = stats
-      .filter(s => s.workoutStarted && s.exerciseResults.length > 0)
+      .filter(s => s.workoutStarted && s.exerciseResults && s.exerciseResults.length > 0)
       .map(stat => ({
         date: stat.updatedAt,
         weight: stat.currentWeight,
@@ -192,7 +212,7 @@ router.get('/progress', authClient, async (req, res) => {
     
     Array.from(allExercises).forEach(exerciseName => {
       exerciseProgress[exerciseName] = stats
-        .filter(s => s.exerciseResults.some(ex => ex.exerciseName === exerciseName))
+        .filter(s => s.exerciseResults && s.exerciseResults.some(ex => ex.exerciseName === exerciseName))
         .map(stat => {
           const exercise = stat.exerciseResults.find(ex => ex.exerciseName === exerciseName);
           return {
@@ -225,7 +245,7 @@ router.get('/progress', authClient, async (req, res) => {
 // Получение плана питания клиента
 router.get('/nutrition', authClient, async (req, res) => {
   try {
-    const client = await User.findById(req.userId).populate('trainerId', 'name');
+    const client = await User.findByPk(req.userId);
     
     if (!client || !client.trainerId) {
       return res.status(404).json({ 
@@ -233,12 +253,19 @@ router.get('/nutrition', authClient, async (req, res) => {
         error: 'Тренер не назначен' 
       });
     }
+
+    // Получаем тренера
+    const trainer = await User.findByPk(client.trainerId);
+    if (!trainer) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Тренер не найден' 
+      });
+    }
     
     const Nutrition = require('../models/Nutrition');
     const nutrition = await Nutrition.findOne({ 
-      clientId: req.userId, 
-      trainerId: client.trainerId._id,
-      isActive: true 
+      where: { clientId: req.userId, trainerId: client.trainerId, isActive: true }
     });
     
     if (!nutrition) {
@@ -247,7 +274,7 @@ router.get('/nutrition', authClient, async (req, res) => {
         hasNutrition: false,
         todayMeals: [],
         weekNutrition: [],
-        trainerName: client.trainerId.name
+        trainerName: trainer.name
       });
     }
     
@@ -259,7 +286,7 @@ router.get('/nutrition', authClient, async (req, res) => {
       hasNutrition: true,
       todayMeals: todayMeals,
       weekNutrition: nutrition.weekNutrition,
-      trainerName: client.trainerId.name
+      trainerName: trainer.name
     });
     
   } catch (error) {
