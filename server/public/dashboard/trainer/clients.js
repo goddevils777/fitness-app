@@ -118,6 +118,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <button class="btn-small btn-secondary" onclick="createWorkout('${client.id}')">
                             💪 Тренировка
                         </button>
+                        <button class="btn-small btn-nutrition" onclick="manageNutrition('${client.id}')">
+                            🥗 Питание
+                        </button>
                     </div>
                 </div>
             `;
@@ -132,11 +135,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Глобальные функции для кнопок
     window.viewClientDetails = function(clientId) {
+        window.location.href = `/dashboard/trainer/client-stats?id=${clientId}`;
+    };
+    
+    window.createWorkout = function(clientId) {
         window.location.href = `/dashboard/trainer/client-detail?id=${clientId}`;
     };
 
-    window.createWorkout = function(clientId) {
-        window.location.href = `/dashboard/trainer/client-detail?id=${clientId}`;
+    window.manageNutrition = function(clientId) {
+        window.location.href = `/dashboard/trainer/client-nutrition?id=${clientId}`;
     };
     
 });

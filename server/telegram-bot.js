@@ -21,25 +21,30 @@ bot.onText(/\/start(.*)/, async (msg, match) => {
   try {
     const existingUser = await User.findOne({ telegramId });
     
-if (existingUser) {
-  // Пользователь уже зарегистрирован - отправляем ссылку на авторизацию
-  const authLink = `${process.env.BASE_URL}/auth?tgId=${telegramId}&name=${encodeURIComponent(name)}&username=${username}`;
-  
-  const userTypeText = existingUser.userType === 'trainer' ? 'Тренер' : 'Победитель';
-  
-  const welcomeMessage = `Привет, ${name}! 👋
+    if (existingUser) {
+      // Пользователь уже зарегистрирован - отправляем кнопку для входа
+      const authLink = `${process.env.BASE_URL}/auth?tgId=${telegramId}&name=${encodeURIComponent(name)}&username=${username}`;
+      
+      const userTypeText = existingUser.userType === 'trainer' ? 'Тренер' : 'Победитель';
+      
+      const welcomeMessage = `Привет, ${name}! 👋
 
-Вы уже зарегистрированы как ${userTypeText} в Fitness App!
+Вы уже зарегистрированы как ${userTypeText} в Fitness App!`;
 
-🔗 Ссылка для входа в приложение:
+      const keyboard = {
+        inline_keyboard: [
+          [{
+            text: '🚀 Открыть приложение',
+            web_app: { url: authLink }
+          }]
+        ]
+      };
 
-${authLink}
-
-👆 Откройте ссылку для входа в ваш дашборд.`;
-
-  bot.sendMessage(chatId, welcomeMessage);
-  return;
-}
+      bot.sendMessage(chatId, welcomeMessage, {
+        reply_markup: keyboard
+      });
+      return;
+    }
   } catch (error) {
     console.error('Ошибка проверки пользователя:', error);
   }
@@ -163,11 +168,18 @@ bot.on('callback_query', async (callbackQuery) => {
     
     const authLink = `${process.env.BASE_URL}/auth?tgId=${userData.telegramId}&name=${encodeURIComponent(userData.name)}&username=${userData.username}`;
     
-    bot.sendMessage(message.chat.id, `🔗 Ссылка для входа в приложение:
-
-${authLink}
-
-👆 Скопируйте ссылку и откройте в браузере.`);
+    const keyboard = {
+      inline_keyboard: [
+        [{
+          text: '🚀 Открыть приложение',
+          web_app: { url: authLink }
+        }]
+      ]
+    };
+    
+    bot.sendMessage(message.chat.id, '🔗 Ссылка для входа в приложение готова!', {
+      reply_markup: keyboard
+    });
     
     pendingUsers.delete(userKey);
     
@@ -195,13 +207,18 @@ ${authLink}
       
       const authLink = `${process.env.BASE_URL}/auth?tgId=${userData.telegramId}&name=${encodeURIComponent(userData.name)}&username=${userData.username}&invite=${userData.inviteCode}&trainer=${encodeURIComponent(userData.trainerName)}`;
       
-      bot.sendMessage(message.chat.id, `✅ Приглашение от тренера ${userData.trainerName}
-
-🔗 Ссылка для завершения регистрации:
-
-${authLink}
-
-👆 Откройте ссылку в браузере.`);
+      const keyboard = {
+        inline_keyboard: [
+          [{
+            text: '🚀 Завершить регистрацию',
+            web_app: { url: authLink }
+          }]
+        ]
+      };
+      
+      bot.sendMessage(message.chat.id, `✅ Приглашение от тренера ${userData.trainerName} принято!`, {
+        reply_markup: keyboard
+      });
       
       pendingUsers.delete(userKey);
       

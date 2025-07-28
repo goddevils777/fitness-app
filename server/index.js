@@ -82,8 +82,28 @@ app.get('/dashboard/trainer/clients', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'dashboard', 'trainer', 'clients.html'));
 });
 
+app.get('/dashboard/trainer/client-stats', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'dashboard', 'trainer', 'client-stats.html'));
+});
+
 app.get('/dashboard/trainer/client-detail', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'dashboard', 'trainer', 'client-detail.html'));
+});
+
+app.get('/dashboard/client/workouts', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'dashboard', 'client', 'workouts.html'));
+});
+
+app.get('/dashboard/client/progress', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'dashboard', 'client', 'progress.html'));
+});
+
+app.get('/dashboard/trainer/client-nutrition', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'dashboard', 'trainer', 'client-nutrition.html'));
+});
+
+app.get('/dashboard/client/nutrition', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'dashboard', 'client', 'nutrition.html'));
 });
 
 

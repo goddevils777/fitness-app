@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness App - Мой прогресс</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/dashboard/client/client.css">
+    <link rel="stylesheet" href="/dashboard/client/progress.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button id="backBtn" class="btn-back">← К дашборду</button>
+                <h1>📈 Мой прогресс</h1>
+            </div>
+            <div class="user-info">
+                <span id="clientName">Победитель</span>
+                <button id="logoutBtn" class="btn-logout">Выйти</button>
+            </div>
+        </header>
+        
+        <div class="dashboard-content">
+            <!-- Текущий вес -->
+            <div class="current-stats-section">
+                <div class="section-header">
+                    <h3>⚖️ Текущие показатели</h3><br>
+                    <div class="last-update" id="lastUpdate">
+                        Обновлено: Загрузка...
+                    </div>
+                </div>
+                
+                <div class="current-stats-grid">
+                    <div class="stat-card weight-card">
+                        <div class="stat-icon">⚖️</div>
+                        <div class="stat-value" id="currentWeight">--</div>
+                        <div class="stat-label">Текущий вес (кг)</div>
+                    </div>
+                    
+                    <div class="stat-card workouts-card">
+                        <div class="stat-icon">💪</div>
+                        <div class="stat-value" id="totalWorkouts">--</div>
+                        <div class="stat-label">Всего тренировок</div>
+                    </div>
+                    
+                    <div class="stat-card exercises-card">
+                        <div class="stat-icon">🏋️</div>
+                        <div class="stat-value" id="totalExercises">--</div>
+                        <div class="stat-label">Упражнений выполнено</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- История результатов -->
+            <div class="progress-history-section">
+                <div class="section-header">
+                    <h3>📊 История тренировок</h3>
+                </div>
+                
+                <div id="progressHistory" class="progress-history">
+                    <div class="loading">Загрузка истории...</div>
+                </div>
+            </div>
+            
+            <!-- Результаты упражнений -->
+            <div class="exercises-progress-section">
+                <div class="section-header">
+                    <h3>🏋️ Прогресс по упражнениям</h3>
+                </div>
+                
+                <div id="exercisesProgress" class="exercises-progress">
+                    <div class="loading">Загрузка прогресса...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/dashboard/client/progress.js"></script>
+</body>
+</html>

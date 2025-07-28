@@ -75,46 +75,64 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Обработчики событий
         workoutBtn.addEventListener('click', function() {
-            alert('Раздел "Мои тренировки" - в разработке');
+            window.location.href = '/dashboard/client/workouts';
         });
         
         nutritionBtn.addEventListener('click', function() {
-            alert('Раздел "Питание" - в разработке');
+            window.location.href = '/dashboard/client/nutrition';
         });
         
         progressBtn.addEventListener('click', function() {
-            alert('Раздел "Прогресс" - в разработке');
+            window.location.href = '/dashboard/client/progress';
         });
+
+
         
         logoutBtn.addEventListener('click', logout);
         
-        // Функции
         async function loadClientData() {
             try {
-                const response = await fetch(`/api/client/profile`, {
+                // Загружаем профиль клиента
+                const profileResponse = await fetch(`/api/client/profile`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
                 
-                if (response.ok) {
-                    const data = await response.json();
-                    clientName.textContent = data.name;
-                    completedWorkouts.textContent = data.completedWorkouts || 8;
-                    streak.textContent = data.streak || 3;
-                    nextWorkout.textContent = data.nextWorkout || 'Завтра в 18:00';
-                    trainerInfo.textContent = data.trainerName ? `${data.trainerName} - Ваш тренер` : 'Тренер не назначен';
-                    goalInfo.textContent = data.goal || 'Цель не установлена';
-                } else {
-                    throw new Error('Ошибка загрузки профиля');
+                // Загружаем расписание тренировок
+                const scheduleResponse = await fetch(`/api/client/schedule`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (profileResponse.ok) {
+                    const profileData = await profileResponse.json();
+                    clientName.textContent = profileData.name;
+                    completedWorkouts.textContent = profileData.completedWorkouts || 8;
+                    streak.textContent = profileData.streak || 3;
+                    trainerInfo.textContent = profileData.trainerName ? `${profileData.trainerName} - Ваш тренер` : 'Тренер не назначен';
+                    goalInfo.textContent = profileData.goal || 'Цель не установлена';
                 }
+                
+                if (scheduleResponse.ok) {
+                    const scheduleData = await scheduleResponse.json();
+                    
+                    if (scheduleData.hasSchedule && scheduleData.nextWorkout) {
+                        const nextWorkoutData = scheduleData.nextWorkout;
+                        nextWorkout.textContent = `${nextWorkoutData.day} в ${nextWorkoutData.time}`;
+                    } else {
+                        nextWorkout.textContent = 'Расписание не назначено';
+                    }
+                }
+                
             } catch (error) {
                 console.error('Ошибка загрузки данных:', error);
                 // Fallback: получаем имя из localStorage
                 clientName.textContent = localStorage.getItem('userName') || 'Победитель';
                 completedWorkouts.textContent = '8';
                 streak.textContent = '3';
-                nextWorkout.textContent = 'Завтра в 18:00';
+                nextWorkout.textContent = 'Расписание не назначено';
                 trainerInfo.textContent = 'Тренер не назначен';
                 goalInfo.textContent = 'Цель не установлена';
             }

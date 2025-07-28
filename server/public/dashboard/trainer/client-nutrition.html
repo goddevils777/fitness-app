@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness App - План питания</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/dashboard/trainer/trainer.css">
+    <link rel="stylesheet" href="/dashboard/trainer/client-nutrition.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button id="backBtn" class="btn-back">← К списку</button>
+                <h1>🥗 План питания</h1>
+            </div>
+            <div class="user-info">
+                <span id="trainerName">Тренер</span>
+                <button id="logoutBtn" class="btn-logout">Выйти</button>
+            </div>
+        </header>
+        
+        <div class="dashboard-content">
+            <!-- Информация о клиенте -->
+            <div class="client-overview">
+                <div class="client-info-card">
+                    <div class="client-avatar-large" id="clientAvatar">А</div>
+                    <div class="client-details">
+                        <h2 id="clientFullName">Имя клиента</h2>
+                        <p id="clientUsername">@username</p>
+                        <p id="joinDate">Присоединился: --</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- План питания -->
+            <div class="nutrition-section">
+                <div class="section-header">
+                    <h3>🍽️ Недельный план питания</h3>
+                </div>
+                
+                <div class="nutrition-grid">
+                    <div class="day-nutrition-card">
+                        <h4>Понедельник <span class="day-date" id="monday-date"></span></h4>
+                        <div class="meals-container" id="monday-meals">
+                            <!-- Блюда будут добавляться динамически -->
+                        </div>
+                        <button class="btn-add-meal" onclick="addMeal('monday')">
+                            ➕ Добавить блюдо
+                        </button>
+                    </div>
+                    
+                    <div class="day-nutrition-card">
+                        <h4>Вторник <span class="day-date" id="tuesday-date"></span></h4>
+                        <div class="meals-container" id="tuesday-meals">
+                            <!-- Блюда будут добавляться динамически -->
+                        </div>
+                        <button class="btn-add-meal" onclick="addMeal('tuesday')">
+                            ➕ Добавить блюдо
+                        </button>
+                    </div>
+                    
+                    <div class="day-nutrition-card">
+                        <h4>Среда <span class="day-date" id="wednesday-date"></span></h4>
+                        <div class="meals-container" id="wednesday-meals">
+                            <!-- Блюда будут добавляться динамически -->
+                        </div>
+                        <button class="btn-add-meal" onclick="addMeal('wednesday')">
+                            ➕ Добавить блюдо
+                        </button>
+                    </div>
+                    
+                    <div class="day-nutrition-card">
+                        <h4>Четверг <span class="day-date" id="thursday-date"></span></h4>
+                        <div class="meals-container" id="thursday-meals">
+                            <!-- Блюда будут добавляться динамически -->
+                        </div>
+                        <button class="btn-add-meal" onclick="addMeal('thursday')">
+                            ➕ Добавить блюдо
+                        </button>
+                    </div>
+                    
+                    <div class="day-nutrition-card">
+                        <h4>Пятница <span class="day-date" id="friday-date"></span></h4>
+                        <div class="meals-container" id="friday-meals">
+                            <!-- Блюда будут добавляться динамически -->
+                        </div>
+                        <button class="btn-add-meal" onclick="addMeal('friday')">
+                            ➕ Добавить блюдо
+                        </button>
+                    </div>
+                    
+                    <div class="day-nutrition-card">
+                        <h4>Суббота <span class="day-date" id="saturday-date"></span></h4>
+                        <div class="meals-container" id="saturday-meals">
+                            <!-- Блюда будут добавляться динамически -->
+                        </div>
+                        <button class="btn-add-meal" onclick="addMeal('saturday')">
+                            ➕ Добавить блюдо
+                        </button>
+                    </div>
+                    
+                    <div class="day-nutrition-card">
+                        <h4>Воскресенье <span class="day-date" id="sunday-date"></span></h4>
+                        <div class="meals-container" id="sunday-meals">
+                            <!-- Блюда будут добавляться динамически -->
+                        </div>
+                        <button class="btn-add-meal" onclick="addMeal('sunday')">
+                            ➕ Добавить блюдо
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/dashboard/trainer/client-nutrition.js"></script>
+</body>
+</html>

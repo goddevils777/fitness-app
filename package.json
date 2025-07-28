@@ -12,12 +12,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
-    "mongoose": "^7.5.0",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "node-telegram-bot-api": "^0.61.0",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "bcryptjs": "^2.4.3"
-  }
+    "mongoose": "^7.5.0",
+    "node-telegram-bot-api": "^0.61.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goddevils777/fitness-app.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/goddevils777/fitness-app/issues"
+  },
+  "homepage": "https://github.com/goddevils777/fitness-app#readme"
 }

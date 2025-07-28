@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness App - Статистика клиента</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/dashboard/trainer/trainer.css">
+    <link rel="stylesheet" href="/dashboard/trainer/client-stats.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button id="backBtn" class="btn-back">← К списку</button>
+                <h1>📊 Статистика клиента</h1>
+            </div>
+            <div class="user-info">
+                <span id="trainerName">Тренер</span>
+                <button id="logoutBtn" class="btn-logout">Выйти</button>
+            </div>
+        </header>
+        
+        <div class="dashboard-content">
+            <!-- Информация о клиенте -->
+            <div class="client-overview">
+                <div class="client-info-card">
+                    <div class="client-avatar-large" id="clientAvatar">А</div>
+                    <div class="client-details">
+                        <h2 id="clientFullName">Имя клиента</h2>
+                        <p id="clientUsername">@username</p>
+                        <p id="joinDate">Присоединился: --</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Статистика клиента -->
+            <div class="client-stats-section">
+                <div class="section-header">
+                    <h3>📊 Статистика клиента</h3>
+                      <div class="workout-timestamp" id="workoutTimestamp"></div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="weight-card">
+                        <h4>⚖️ Текущий вес (кг)</h4>
+                            <div class="weight-input-group">
+                                <div class="weight-controls">
+                                    <button class="weight-btn" id="weightMinusBtn">−</button>
+                                    <input type="number" id="currentWeight" placeholder="70" min="40" max="300" step="0.1">
+                                    <button class="weight-btn" id="weightPlusBtn">+</button>
+                                </div>
+                            </div>
+                    </div>
+                    
+                    <div class="exercises-stats-card">
+                        <h4>🏋️ Результаты упражнений</h4>
+                        <div id="exerciseStatsContainer">
+                             <div class="no-exercises-message">
+                                Загрузка упражнений...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/dashboard/trainer/client-stats.js"></script>
+</body>
+</html>

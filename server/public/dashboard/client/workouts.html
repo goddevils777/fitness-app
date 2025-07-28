@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness App - Мои тренировки</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/dashboard/client/client.css">
+    <link rel="stylesheet" href="/dashboard/client/workouts.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button id="backBtn" class="btn-back">← К дашборду</button>
+                <h1>💪 Мои тренировки</h1>
+            </div>
+            <div class="user-info">
+                <span id="clientName">Победитель</span>
+                <button id="logoutBtn" class="btn-logout">Выйти</button>
+            </div>
+        </header>
+        
+        <div class="dashboard-content">
+            <!-- Следующая тренировка -->
+            <div class="next-workout-section">
+                <div class="section-header">
+                    <h3>🔥 Следующая тренировка</h3>
+                </div>
+                <div id="nextWorkoutCard" class="next-workout-card">
+                    <div class="loading">Загрузка...</div>
+                </div>
+            </div>
+            
+            <!-- Расписание тренировок -->
+            <div class="schedule-section">
+                <div class="section-header">
+                    <h3>📅 Расписание тренировок</h3><br>
+                    <div class="trainer-info" id="trainerInfo">
+                        Тренер: Загрузка...
+                    </div>
+                </div>
+                
+                <div id="scheduleGrid" class="schedule-grid">
+                    <div class="loading">Загрузка расписания...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/dashboard/client/workouts.js"></script>
+</body>
+</html>

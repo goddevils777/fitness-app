@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness App - Мое питание</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/dashboard/client/client.css">
+    <link rel="stylesheet" href="/dashboard/client/nutrition.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button id="backBtn" class="btn-back">← К дашборду</button>
+                <h1>🥗 Мое питание</h1>
+            </div>
+            <div class="user-info">
+                <span id="clientName">Победитель</span>
+                <button id="logoutBtn" class="btn-logout">Выйти</button>
+            </div>
+        </header>
+        
+        <div class="dashboard-content">
+            <!-- Сегодняшние блюда -->
+            <div class="today-meals-section">
+                <div class="section-header">
+                    <h3>🍽️ Питание на сегодня</h3><br>
+                    <div class="today-date" id="todayDate">
+                        Загрузка...
+                    </div>
+                </div>
+                
+                <div id="todayMealsContainer" class="today-meals-container">
+                    <div class="loading">Загрузка питания...</div>
+                </div>
+            </div>
+            
+            <!-- Недельный план питания -->
+            <div class="weekly-nutrition-section">
+                <div class="section-header">
+                    <h3>📅 Недельный план питания</h3><br>
+                    <div class="trainer-info" id="trainerInfo">
+                        👨‍🏫 Составлен тренером: Загрузка...
+                    </div>
+                </div>
+                
+                <div id="weeklyNutritionGrid" class="weekly-nutrition-grid">
+                    <div class="loading">Загрузка плана питания...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/dashboard/client/nutrition.js"></script>
+</body>
+</html>
