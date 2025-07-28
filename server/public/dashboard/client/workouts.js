@@ -96,8 +96,8 @@ document.addEventListener('DOMContentLoaded', function() {
         nextWorkoutCard.innerHTML = `
             <div class="no-workout">
                 <div style="font-size: 48px; margin-bottom: 15px;">📅</div>
-                <div style="font-size: 18px; margin-bottom: 10px;">Расписание не назначено</div>
-                <div style="font-size: 14px; opacity: 0.8;">Обратитесь к своему тренеру</div>
+                <div style="font-size: 18px; margin-bottom: 10px; color: white;">Расписание не назначено</div>
+                <div style="font-size: 14px; opacity: 0.8; color: white;">Обратитесь к своему тренеру</div>
             </div>
         `;
     }

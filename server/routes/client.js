@@ -86,7 +86,8 @@ router.get('/schedule', authClient, async (req, res) => {
         success: true,
         hasSchedule: false,
         nextWorkout: null,
-        weekSchedule: []
+        weekSchedule: [],
+        trainerName: trainer.name
       });
     }
     
