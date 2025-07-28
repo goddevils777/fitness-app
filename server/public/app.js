@@ -32,6 +32,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             const result = await response.json();
+            console.log('Response status:', response.status);
+console.log('Result from check-user:', result);
             
             if (result.success && result.exists) {
                 // Пользователь уже существует - автоматический вход
@@ -50,12 +52,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     `;
                     
                     setTimeout(() => {
+                        console.log('Перенаправление на:', result.user.userType === 'trainer' ? '/dashboard/trainer' : '/dashboard/client');
                         if (result.user.userType === 'trainer') {
                             window.location.href = '/dashboard/trainer';
                         } else {
                             window.location.href = '/dashboard/client';
                         }
-                    }, 1500);
+                    }, 5000); // Увеличено до 5 секунд
                 }, 1000);
                 
                 return; // Выходим, не показываем выбор типа
