@@ -8,8 +8,23 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Подключение к SQLite
-sequelize.sync()
-  .then(() => console.log('SQLite база данных подключена'))
+sequelize.sync({ force: true })
+  .then(async () => {
+    console.log('🔥 SQLite база данных ПОЛНОСТЬЮ ПЕРЕСОЗДАНА');
+    
+    // Дополнительная очистка на всякий случай
+    const User = require('./models/User');
+    const Schedule = require('./models/Schedule');
+    const ClientStats = require('./models/ClientStats');
+    const Nutrition = require('./models/Nutrition');
+    
+    await User.destroy({ where: {}, truncate: true });
+    await Schedule.destroy({ where: {}, truncate: true });
+    await ClientStats.destroy({ where: {}, truncate: true });
+    await Nutrition.destroy({ where: {}, truncate: true });
+    
+    console.log('🔥 ВСЕ ТАБЛИЦЫ ОЧИЩЕНЫ');
+  })
   .catch(err => console.error('Ошибка подключения к базе данных:', err));
 
 // Импорт модели пользователя
