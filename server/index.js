@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const sequelize = require('./database');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
@@ -7,10 +7,10 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Подключение к MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('MongoDB подключена'))
-  .catch(err => console.error('Ошибка подключения к MongoDB:', err));
+// Подключение к SQLite
+sequelize.sync()
+  .then(() => console.log('SQLite база данных подключена'))
+  .catch(err => console.error('Ошибка подключения к базе данных:', err));
 
 // Импорт модели пользователя
 const User = require('./models/User');

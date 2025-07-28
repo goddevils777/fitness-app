@@ -1,33 +1,36 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../database');
 
-const userSchema = new mongoose.Schema({
+const User = sequelize.define('User', {
   telegramId: {
-    type: String,
-    required: true,
-    unique: true
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: false
   },
   name: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
-  username: String,
+  username: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   userType: {
-    type: String,
-    enum: ['trainer', 'client'],
-    required: true
+    type: DataTypes.ENUM('trainer', 'client'),
+    allowNull: false
   },
-  age: Number,
   trainerId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'Users',
+      key: 'id'
+    }
   },
-  inviteCode: String,
-  isActive: {
-    type: Boolean,
-    default: true
+  inviteCode: {
+    type: DataTypes.STRING,
+    allowNull: true
   }
-}, {
-  timestamps: true
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = User;

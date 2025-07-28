@@ -23,57 +23,51 @@ router.post('/generate-link', async (req, res) => {
 });
 
 // Авторизация пользователя
-
 router.post('/login', async (req, res) => {
   try {
     const { telegramId, name, username, userType, inviteCode } = req.body;
     
-    let user = await User.findOne({ telegramId });
+    let user = await User.findOne({ where: { telegramId } });
     let trainerId = null;
     
     // Если есть код приглашения, найти тренера
     if (inviteCode) {
-      const trainer = await User.findOne({ inviteCode: inviteCode, userType: 'trainer' });
+      const trainer = await User.findOne({ 
+        where: { inviteCode: inviteCode, userType: 'trainer' } 
+      });
       if (!trainer) {
         return res.status(400).json({ 
           success: false, 
           error: 'Неверный код приглашения' 
         });
       }
-      trainerId = trainer._id;
+      trainerId = trainer.id;
       
       // Очистить код приглашения у тренера после использования
-      await User.findByIdAndUpdate(trainer._id, { 
-        $unset: { inviteCode: 1 } 
-      });
+      await trainer.update({ inviteCode: null });
     }
     
     if (!user) {
       // Создаем нового пользователя
-      user = new User({
+      user = await User.create({
         telegramId,
         name,
         username,
         userType,
         trainerId: trainerId
       });
-      await user.save();
     } else {
       // Обновляем существующего пользователя
-      user.name = name;
-      user.username = username;
-      user.userType = userType;
-      
-      // Если есть тренер, обновляем связь
-      if (trainerId) {
-        user.trainerId = trainerId;
-      }
-      
-      await user.save();
+      await user.update({
+        name,
+        username,
+        userType,
+        trainerId: trainerId || user.trainerId
+      });
     }
     
     const token = jwt.sign(
-      { userId: user._id, userType: user.userType },
+      { userId: user.id, userType: user.userType },
       process.env.JWT_SECRET,
       { expiresIn: '30d' }
     );
@@ -82,7 +76,7 @@ router.post('/login', async (req, res) => {
       success: true,
       token,
       user: {
-        id: user._id,
+        id: user.id,
         name: user.name,
         userType: user.userType,
         hasTrainer: !!user.trainerId
@@ -98,12 +92,12 @@ router.post('/check-user', async (req, res) => {
   try {
     const { telegramId } = req.body;
     
-    const user = await User.findOne({ telegramId });
+    const user = await User.findOne({ where: { telegramId } });
     
     if (user) {
       // Пользователь существует - генерируем токен для автоматического входа
       const token = jwt.sign(
-        { userId: user._id, userType: user.userType },
+        { userId: user.id, userType: user.userType },
         process.env.JWT_SECRET,
         { expiresIn: '30d' }
       );
@@ -113,7 +107,7 @@ router.post('/check-user', async (req, res) => {
         exists: true,
         token,
         user: {
-          id: user._id,
+          id: user.id,
           name: user.name,
           userType: user.userType
         }
