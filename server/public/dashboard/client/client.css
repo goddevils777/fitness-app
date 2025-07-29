@@ -160,6 +160,18 @@
     margin-bottom: 5px;
 }
 
+.meal-details {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.meal-time {
+    color: #007bff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
 .meal-calories {
     color: #666;
     font-size: 14px;
@@ -204,5 +216,11 @@
     .meal-actions {
         margin-top: 10px;
         align-self: flex-end;
+    }
+    
+    .meal-details {
+        flex-direction: column;
+        gap: 5px;
+        align-items: flex-start;
     }
 }
