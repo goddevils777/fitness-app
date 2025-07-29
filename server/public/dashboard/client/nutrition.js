@@ -107,14 +107,17 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="meal-item" id="meal-${meal.name.replace(/\s+/g, '-')}">
                 <div class="meal-info">
                     <div class="meal-name">${meal.name}</div>
-                    <div class="meal-calories">🔥 ${meal.calories} ккал</div>
+                    <div class="meal-details">
+                        <span class="meal-time">🕐 ${meal.time.hour}:${meal.time.minute}</span>
+                        <span class="meal-calories">${meal.calories} ккал</span>
+                    </div>
                 </div>
                 <div class="meal-actions">
                     <button class="btn-eaten" onclick="markMealAsEaten('${meal.name}')">
-                        ✅ Съел
+                        🍽️ Съел
                     </button>
                     <div class="meal-status" style="display: none;">
-                        <span class="eaten-status">✅ Съедено</span>
+                        <span class="eaten-status">✅ Выполнено</span>
                     </div>
                 </div>
             </div>
