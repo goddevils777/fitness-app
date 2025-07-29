@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="meal-actions">
                     <button class="btn-eaten" onclick="markMealAsEaten('${meal.name}')">
-                        🍽️ Съел
+                        🍽️ Выполнил
                     </button>
                     <div class="meal-status" style="display: none;">
                         <span class="eaten-status">✅ Выполнено</span>

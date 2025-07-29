@@ -14,6 +14,10 @@ sequelize.sync()
 
 // Импорт модели пользователя
 const User = require('./models/User');
+const Schedule = require('./models/Schedule');
+const ClientStats = require('./models/ClientStats');
+const Nutrition = require('./models/Nutrition');
+const MealProgress = require('./models/MealProgress');
 
 // Middleware
 app.use(cors());
