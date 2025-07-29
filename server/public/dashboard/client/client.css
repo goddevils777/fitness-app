@@ -164,19 +164,21 @@
     display: flex;
     gap: 15px;
     align-items: center;
-    flex-wrap: wrap; /* Добавить эту строку */
+    justify-content: flex-start; /* Добавить */
+    flex-wrap: nowrap; /* Изменить с wrap на nowrap */
 }
 
 .meal-time {
     color: #007bff;
     font-size: 14px;
     font-weight: 500;
-    white-space: nowrap; /* Добавить эту строку */
+    white-space: nowrap;
 }
 
 .meal-calories {
     color: #666;
     font-size: 14px;
+    white-space: nowrap; /* Добавить */
 }
 
 .meal-actions {
