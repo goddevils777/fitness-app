@@ -220,9 +220,5 @@
         align-self: flex-end;
     }
     
-    .meal-details {
-        flex-direction: column;
-        gap: 5px;
-        align-items: flex-start;
-    }
+
 }
