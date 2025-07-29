@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const userTypeSelection = document.getElementById('userTypeSelection');
     const success = document.getElementById('success');
     const trainerBtn = document.getElementById('trainerBtn');
-
+    const clientBtn = document.getElementById('clientBtn');
     
     // Проверка параметров
     if (!telegramId || !name) {
@@ -90,6 +90,10 @@ console.log('Result from check-user:', result);
             // Обычные кнопки выбора типа
             trainerBtn.addEventListener('click', () => {
                 registerUser('trainer');
+            });
+            
+            clientBtn.addEventListener('click', () => {
+                registerUser('client');
             });
         }
         
@@ -197,5 +201,41 @@ console.log('Result from check-user:', result);
         } catch (error) {
             loading.textContent = 'Ошибка сети: ' + error.message;
         }
+    }
+
+    async function checkExistingUserForClient() {
+        try {
+            const response = await fetch('/api/auth/check-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ telegramId })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success && result.exists) {
+                // Пользователь существует - обычный вход
+                registerUser('client');
+            } else {
+                // Пользователя нет - нужно приглашение
+                showInviteRequiredMessage();
+            }
+        } catch (error) {
+            showInviteRequiredMessage();
+        }
+    }
+
+    function showInviteRequiredMessage() {
+        userTypeSelection.classList.add('hidden');
+        success.classList.remove('hidden');
+        success.innerHTML = `
+            <h2>🔗 Нужно приглашение</h2>
+            <p>Победители могут регистрироваться только по приглашению от тренера</p>
+            <p style="margin-top: 20px;">
+                <strong>Попросите тренера создать ссылку-приглашение и перейдите по ней</strong>
+            </p>
+        `;
     }
 });
