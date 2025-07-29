@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const userTypeSelection = document.getElementById('userTypeSelection');
     const success = document.getElementById('success');
     const trainerBtn = document.getElementById('trainerBtn');
-    const clientBtn = document.getElementById('clientBtn');
+
     
     // Проверка параметров
     if (!telegramId || !name) {
@@ -90,10 +90,6 @@ console.log('Result from check-user:', result);
             // Обычные кнопки выбора типа
             trainerBtn.addEventListener('click', () => {
                 registerUser('trainer');
-            });
-            
-            clientBtn.addEventListener('click', () => {
-                registerUser('client');
             });
         }
         

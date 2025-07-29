@@ -480,4 +480,43 @@ router.get('/clients/:clientId/nutrition', authTrainer, async (req, res) => {
   }
 });
 
+// Получение прогресса питания клиента
+router.get('/clients/:clientId/meal-progress/:date', authTrainer, async (req, res) => {
+  try {
+    const { clientId, date } = req.params;
+    const MealProgress = require('../models/MealProgress');
+    
+    // Проверяем что клиент принадлежит этому тренеру
+    const client = await User.findByPk(clientId);
+    if (!client || client.trainerId != req.userId) {
+      return res.status(404).json({ success: false, error: 'Клиент не найден' });
+    }
+    
+    // Получаем прогресс питания за день
+    const progress = await MealProgress.findAll({
+      where: { 
+        clientId: clientId,
+        trainerId: req.userId,
+        date: date 
+      }
+    });
+    
+    // Получаем план питания чтобы сравнить
+    const Nutrition = require('../models/Nutrition');
+    const nutrition = await Nutrition.findOne({ 
+      where: { clientId: clientId, trainerId: req.userId, isActive: true }
+    });
+    
+    res.json({ 
+      success: true, 
+      progress: progress,
+      nutritionPlan: nutrition ? nutrition.weekNutrition : []
+    });
+    
+  } catch (error) {
+    console.error('Ошибка получения прогресса питания:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 module.exports = router;

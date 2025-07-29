@@ -325,4 +325,66 @@ function getTodayMeals(weekNutrition) {
   return todayNutrition.meals.sort((a, b) => a.order - b.order);
 }
 
+// Отметить блюдо как съеденное
+router.post('/meal-eaten', authClient, async (req, res) => {
+  try {
+    const { mealName, date } = req.body;
+    const MealProgress = require('../models/MealProgress');
+    
+    const client = await User.findByPk(req.userId);
+    if (!client || !client.trainerId) {
+      return res.status(404).json({ success: false, error: 'Тренер не назначен' });
+    }
+    
+    // Найти или создать запись о блюде
+    let mealProgress = await MealProgress.findOne({
+      where: { 
+        clientId: req.userId, 
+        trainerId: client.trainerId,
+        date: date,
+        mealName: mealName
+      }
+    });
+    
+    if (mealProgress) {
+      await mealProgress.update({ 
+        isEaten: true, 
+        eatenAt: new Date() 
+      });
+    } else {
+      mealProgress = await MealProgress.create({
+        clientId: req.userId,
+        trainerId: client.trainerId,
+        date: date,
+        mealName: mealName,
+        isEaten: true,
+        eatenAt: new Date()
+      });
+    }
+    
+    res.json({ success: true, message: 'Блюдо отмечено как съеденное' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Получить прогресс питания за день
+router.get('/meal-progress/:date', authClient, async (req, res) => {
+  try {
+    const { date } = req.params;
+    const MealProgress = require('../models/MealProgress');
+    
+    const progress = await MealProgress.findAll({
+      where: { 
+        clientId: req.userId, 
+        date: date 
+      }
+    });
+    
+    res.json({ success: true, progress });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 module.exports = router;

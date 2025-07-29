@@ -104,14 +104,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         const mealsHTML = todayMeals.map(meal => `
-            <div class="meal-card">
-                <div class="meal-time">${meal.time.hour}:${meal.time.minute}</div>
-                <div class="meal-name">${meal.name}</div>
-                <div class="meal-calories">${meal.calories} ккал</div>
+            <div class="meal-item" id="meal-${meal.name.replace(/\s+/g, '-')}">
+                <div class="meal-info">
+                    <div class="meal-name">${meal.name}</div>
+                    <div class="meal-calories">🔥 ${meal.calories} ккал</div>
+                </div>
+                <div class="meal-actions">
+                    <button class="btn-eaten" onclick="markMealAsEaten('${meal.name}')">
+                        ✅ Съел
+                    </button>
+                    <div class="meal-status" style="display: none;">
+                        <span class="eaten-status">✅ Съедено</span>
+                    </div>
+                </div>
             </div>
         `).join('');
         
         todayMealsContainer.innerHTML = mealsHTML;
+        
+        // Загружаем прогресс питания за сегодня
+        loadTodayProgress();
     }
     
     function displayWeeklyNutrition(weekNutrition) {
@@ -211,4 +223,78 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
     }
+
+    // Отметить блюдо как съеденное
+    async function markMealAsEaten(mealName) {
+        try {
+            const today = new Date().toISOString().split('T')[0]; // Формат YYYY-MM-DD
+            
+            const response = await fetch('/api/client/meal-eaten', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    mealName: mealName,
+                    date: today
+                })
+            });
+            
+            if (response.ok) {
+                // Обновляем интерфейс
+                const mealId = `meal-${mealName.replace(/\s+/g, '-')}`;
+                const mealElement = document.getElementById(mealId);
+                if (mealElement) {
+                    const button = mealElement.querySelector('.btn-eaten');
+                    const status = mealElement.querySelector('.meal-status');
+                    
+                    button.style.display = 'none';
+                    status.style.display = 'block';
+                }
+            } else {
+                alert('Ошибка при сохранении');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Ошибка при сохранении');
+        }
+    }
+
+    // Загрузить прогресс питания за сегодня
+    async function loadTodayProgress() {
+        try {
+            const today = new Date().toISOString().split('T')[0];
+            
+            const response = await fetch(`/api/client/meal-progress/${today}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                
+                // Отмечаем съеденные блюда
+                data.progress.forEach(meal => {
+                    if (meal.isEaten) {
+                        const mealId = `meal-${meal.mealName.replace(/\s+/g, '-')}`;
+                        const mealElement = document.getElementById(mealId);
+                        if (mealElement) {
+                            const button = mealElement.querySelector('.btn-eaten');
+                            const status = mealElement.querySelector('.meal-status');
+                            
+                            button.style.display = 'none';
+                            status.style.display = 'block';
+                        }
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки прогресса:', error);
+        }
+    }
+
+    // Делаем функции глобальными
+    window.markMealAsEaten = markMealAsEaten;
 });
