@@ -93,7 +93,7 @@ console.log('Result from check-user:', result);
             });
             
             clientBtn.addEventListener('click', () => {
-                registerUser('client');
+                checkExistingUserForClient();
             });
         }
         

@@ -9,7 +9,25 @@ const PORT = process.env.PORT || 3000;
 
 // Подключение к SQLite
 sequelize.sync()
-  .then(() => console.log('SQLite база данных подключена'))
+  .then(async () => {
+    console.log('SQLite база данных подключена');
+    
+    // ВРЕМЕННАЯ ОЧИСТКА ВСЕХ ПОЛЬЗОВАТЕЛЕЙ
+    const User = require('./models/User');
+    const Schedule = require('./models/Schedule');
+    const ClientStats = require('./models/ClientStats');
+    const Nutrition = require('./models/Nutrition');
+    const MealProgress = require('./models/MealProgress');
+    
+    await User.destroy({ where: {}, truncate: true });
+    await Schedule.destroy({ where: {}, truncate: true });
+    await ClientStats.destroy({ where: {}, truncate: true });
+    await Nutrition.destroy({ where: {}, truncate: true });
+    await MealProgress.destroy({ where: {}, truncate: true });
+    
+    console.log('🔥 ВСЯ БАЗА ДАННЫХ ОЧИЩЕНА');
+    
+  })
   .catch(err => console.error('Ошибка подключения к базе данных:', err));
 
 // Импорт модели пользователя
